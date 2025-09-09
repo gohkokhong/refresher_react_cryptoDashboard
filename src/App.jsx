@@ -7,19 +7,23 @@ const App = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(API_URL)
-      .then((res) => {
+    const fetchCoins = async () => {
+      try {
+        const res = await fetch(API_URL);
+
         if (!res.ok) throw new Error('Failed to fetch data');
-        return res.json();
-      })
-      .then((data) => {
+
+        const data = await res.json();
         console.log(data);
         setCoins(data);
-      }
-      ).catch((err) => {
+      } catch (err) {
         setError(err.message);
+      } finally {
         setLoading(false);
-      });
+      }
+    }
+
+    fetchCoins();
   }, []);
 
   return (
